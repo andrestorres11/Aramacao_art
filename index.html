@@ -876,6 +876,50 @@
             font-size: 1rem;
             margin-bottom: 1rem;
         }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--helecho), var(--bambu));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -967,6 +1011,24 @@
             <button class="admin-btn" onclick="addProduct()">➕ Agregar Producto</button>
             <button class="admin-btn" onclick="clearForm()" style="background: linear-gradient(135deg, var(--helecho), var(--bambu));">🔄 Limpiar</button>
             <button class="admin-btn" onclick="toggleAdmin()" style="background: linear-gradient(135deg, #666, #999);">❌ Cerrar Admin</button>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 3px solid var(--bambu);">
+                <h3 style="font-family: 'Amatic SC', cursive; font-size: 2rem; color: var(--bosque); margin-bottom: 1rem;">
+                    💾 Gestión de Datos
+                </h3>
+                <button class="admin-btn" onclick="exportProducts()" style="background: linear-gradient(135deg, var(--cielo), var(--sky));">
+                    📥 Exportar Productos
+                </button>
+                <button class="admin-btn" onclick="importProducts()" style="background: linear-gradient(135deg, var(--cielo), var(--sky));">
+                    📤 Importar Productos
+                </button>
+                <button class="admin-btn" onclick="resetToDefaultProducts()" style="background: linear-gradient(135deg, var(--tucan), var(--guacamaya));">
+                    🔄 Restaurar Productos de Ejemplo
+                </button>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.9rem; line-height: 1.6;">
+                    💡 <strong>Tip:</strong> Exporta tus productos regularmente como respaldo. Los datos se guardan automáticamente en tu navegador, pero si borras el caché se perderán.
+                </p>
+            </div>
 
             <div id="adminProductList" style="margin-top: 2rem;">
                 <!-- Lista de productos para editar/eliminar -->
@@ -1020,6 +1082,12 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastIcon">💾</span>
+        <span id="toastMessage">Guardado</span>
+    </div>
+
     <footer>
         <p style="font-size: 1.5rem; margin-bottom: 1rem;">🌿 Aramacao Art 🌿</p>
         <p>Artesanías hechas con amor y respeto por la naturaleza</p>
@@ -1042,11 +1110,11 @@
 
     <script>
         // CONFIGURACIÓN - ¡IMPORTANTE! Cambia estos valores
-        const WHATSAPP_NUMBER = '573001234567'; // Cambia por tu número (incluye código de país sin +)
+        const WHATSAPP_NUMBER = '573184747046'; // Número de WhatsApp de Aramacao Art
         const ADMIN_PASSWORD = 'natura2024'; // Cambia esta contraseña
 
-        // Base de datos de productos (en producción usar backend/base de datos real)
-        let products = [
+        // Base de datos de productos (se guardan automáticamente en el navegador)
+        let products = loadProductsFromStorage() || [
             {
                 id: 1,
                 name: 'Aretes de Guacamaya',
@@ -1106,6 +1174,95 @@
         let cart = [];
         let currentCategory = 'all';
         let editingProductId = null;
+
+        // Funciones de persistencia de datos
+        function saveProductsToStorage() {
+            try {
+                localStorage.setItem('aramacao_products', JSON.stringify(products));
+                console.log('✅ Productos guardados correctamente');
+                showToast('💾', 'Cambios guardados');
+            } catch (e) {
+                console.error('❌ Error al guardar productos:', e);
+                alert('⚠️ Error al guardar. Verifica que tu navegador permita almacenamiento local.');
+            }
+        }
+
+        function loadProductsFromStorage() {
+            try {
+                const saved = localStorage.getItem('aramacao_products');
+                if (saved) {
+                    console.log('✅ Productos cargados desde el almacenamiento');
+                    return JSON.parse(saved);
+                }
+                return null;
+            } catch (e) {
+                console.error('❌ Error al cargar productos:', e);
+                return null;
+            }
+        }
+
+        function showToast(icon, message) {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastIcon.textContent = icon;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    toast.style.animation = '';
+                }, 300);
+            }, 2000);
+        }
+
+        function resetToDefaultProducts() {
+            if (confirm('⚠️ ¿Estás seguro? Esto eliminará todos tus productos personalizados y restaurará los productos de ejemplo.')) {
+                localStorage.removeItem('aramacao_products');
+                location.reload();
+            }
+        }
+
+        function exportProducts() {
+            const dataStr = JSON.stringify(products, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'aramacao-productos-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Productos exportados correctamente');
+        }
+
+        function importProducts() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        if (confirm(`¿Importar ${imported.length} productos? Esto reemplazará todos los productos actuales.`)) {
+                            products = imported;
+                            saveProductsToStorage();
+                            renderProducts();
+                            alert('✅ Productos importados correctamente');
+                        }
+                    } catch (e) {
+                        alert('❌ Error al leer el archivo. Asegúrate de que sea un archivo JSON válido.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
 
         // Cargar productos al inicio
         window.onload = function() {
@@ -1376,6 +1533,7 @@
                 alert('✅ Producto agregado');
             }
 
+            saveProductsToStorage(); // Guardar cambios
             clearForm();
             renderProducts();
         }
@@ -1398,6 +1556,7 @@
         function deleteProduct(id) {
             if (confirm('¿Eliminar este producto?')) {
                 products = products.filter(p => p.id !== id);
+                saveProductsToStorage(); // Guardar cambios
                 renderProducts();
                 alert('✅ Producto eliminado');
             }
