@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aramacao Art - Artesanías Hechas con Amor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --coral: #FF6B6B;
+            --sunshine: #FFD93D;
+            --mint: #6BCB77;
+            --sky: #4D96FF;
+            --purple: #9D4EDD;
+            --peach: #FFB4A2;
+            --cream: #FFF8E7;
+            --dark: #2D3142;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #FFE5D9 100%);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Decorative Background Elements */
+        .bg-decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .bg-decoration::before,
+        .bg-decoration::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--coral), transparent);
+        }
+
+        .bg-decoration::before {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -100px;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-decoration::after {
+            width: 300px;
+            height: 300px;
+            bottom: 100px;
+            left: -150px;
+            background: radial-gradient(circle, var(--mint), transparent);
+            animation: float 15s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, 50px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.3"/></svg>');
+            animation: sparkle 3s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
+        }
+
+        .logo {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .tagline {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .emoji-divider {
+            font-size: 2rem;
+            margin: 1rem 0;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 2rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 3px solid var(--coral);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px) rotate(-2deg);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--coral), var(--sunshine));
+            color: white;
+            border-color: var(--sunshine);
+            transform: scale(1.05);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--coral), var(--sunshine), var(--mint), var(--sky), var(--purple));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--peach), var(--cream));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--coral);
+            margin-bottom: 1rem;
+        }
+
+        .product-stock {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--mint);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .product-stock.low {
+            background: var(--sunshine);
+        }
+
+        .product-stock.out {
+            background: #ccc;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--sky), var(--purple));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .buy-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 3px solid var(--purple);
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--purple);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .admin-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--purple), var(--coral));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .admin-btn.secondary {
+            background: linear-gradient(135deg, var(--mint), var(--sky));
+        }
+
+        /* Product List in Admin */
+        .product-list {
+            margin-top: 2rem;
+        }
+
+        .product-item {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: var(--sky);
+            color: white;
+        }
+
+        .delete-btn {
+            background: var(--coral);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* About Section */
+        .about-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2.5rem;
+            color: var(--coral);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-section p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--purple), var(--coral));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+        }
+
+        /* Password Protection */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .password-modal.active {
+            display: flex;
+        }
+
+        .password-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--purple);
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration"></div>
+
+    <header>
+        <div class="logo">ARAMACAO ART</div>
+        <div class="emoji-divider">🎨✨🌈</div>
+        <div class="tagline">✨Creer para crear✨<br>❌Sin moldes❌<br>Envíos a todo el país🚚✈️📦</div>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('tienda')">🛍️ Tienda</button>
+        <button class="tab-btn" onclick="openTab('sobre-mi')">💖 Sobre Mí</button>
+        <button class="tab-btn" onclick="openTab('admin')">🔐 Admin</button>
+    </nav>
+
+    <div class="container">
+        <!-- Tienda Tab -->
+        <div id="tienda" class="tab-content active">
+            <div class="products-grid" id="productsGrid">
+                <!-- Los productos se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Sobre Mí Tab -->
+        <div id="sobre-mi" class="tab-content">
+            <div class="about-section">
+                <h2>Sobre Aramacao Art</h2>
+                <p>¡Hola! Soy un artesano apasionado que crea piezas únicas hechas a mano con amor y dedicación.</p>
+                <p>Cada producto es una obra de arte original, sin moldes, lo que hace que cada pieza sea especial y única.</p>
+                <p>Trabajamos con arcilla polimérica, resina, y otros materiales de alta calidad para crear desde aretes y pines hasta figuras personalizadas tipo Funko Pop.</p>
+                <p><strong>¡Envíos a todo Colombia! 🇨🇴</strong></p>
+                
+                <div class="social-links">
+                    <a href="https://instagram.com/aramacao_art" target="_blank" class="social-btn">
+                        📸 Síguenos en Instagram
+                    </a>
+                    <a href="https://www.tiktok.com/@aramacao_art" target="_blank" class="social-btn">
+                        🎵 TikTok
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tab -->
+        <div id="admin" class="tab-content">
+            <div class="admin-panel">
+                <h2 class="admin-title">🔐 Panel de Administración</h2>
+                
+                <div class="form-group">
+                    <label>Nombre del Producto</label>
+                    <input type="text" id="productName" placeholder="Ej: Aretes de Calla">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="productDescription" placeholder="Describe tu producto..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Precio (COP)</label>
+                    <input type="number" id="productPrice" placeholder="15000">
+                </div>
+
+                <div class="form-group">
+                    <label>Stock Disponible</label>
+                    <input type="number" id="productStock" placeholder="10">
+                </div>
+
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="productCategory">
+                        <option value="aretes">Aretes</option>
+                        <option value="pines">Pines</option>
+                        <option value="funko">Funko Pop</option>
+                        <option value="decoracion">Decoración</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Emoji o Icono (para visualización)</label>
+                    <input type="text" id="productEmoji" placeholder="🌸" maxlength="5">
+                </div>
+
+                <button class="admin-btn" onclick="addProduct()">➕ Agregar Producto</button>
+                <button class="admin-btn secondary" onclick="clearForm()">🔄 Limpiar Formulario</button>
+
+                <div class="product-list" id="adminProductList">
+                    <!-- Lista de productos para administrar -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-content">
+            <h3>🔐 Acceso al Panel de Admin</h3>
+            <input type="password" class="password-input" id="adminPassword" placeholder="Ingresa tu contraseña">
+            <button class="admin-btn" onclick="checkPassword()">Acceder</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Aramacao Art - Todos los derechos reservados</p>
+        <p>💖 Hecho con amor artesanal 💖</p>
+    </footer>
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        // Configuración de MercadoPago (deberás reemplazar con tu Public Key)
+        const mp = new MercadoPago('TEST-tu-public-key-aqui', {
+            locale: 'es-CO'
+        });
+
+        // Base de datos simulada (en producción, esto debería estar en un servidor)
+        let products = [
+            {
+                id: 1,
+                name: 'Aretes de Calla',
+                description: 'Hermosos aretes hechos a mano en forma de flores de calla. Perfectos para cualquier ocasión.',
+                price: 15000,
+                stock: 5,
+                category: 'aretes',
+                emoji: '🌸'
+            },
+            {
+                id: 2,
+                name: 'Pin de Personaje Animado',
+                description: 'Pin único de resina con diseño de personaje animado. Ideal para mochilas y chaquetas.',
+                price: 12000,
+                stock: 8,
+                category: 'pines',
+                emoji: '🎨'
+            },
+            {
+                id: 3,
+                name: 'Funko Pop Personalizado',
+                description: 'Figura tipo Funko Pop 100% personalizada. Crea tu propio personaje único.',
+                price: 45000,
+                stock: 2,
+                category: 'funko',
+                emoji: '🎭'
+            }
+        ];
+
+        let editingProductId = null;
+        const ADMIN_PASSWORD = 'aramacao2024'; // Cambiar esta contraseña
+
+        // Cargar productos al iniciar
+        window.onload = function() {
+            renderProducts();
+            renderAdminProducts();
+        };
+
+        // Función para abrir tabs
+        function openTab(tabName) {
+            // Si intenta abrir admin, pedir contraseña
+            if (tabName === 'admin' && !sessionStorage.getItem('adminAuth')) {
+                document.getElementById('passwordModal').classList.add('active');
+                return;
+            }
+
+            const tabs = document.querySelectorAll('.tab-content');
+            const btns = document.querySelectorAll('.tab-btn');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Verificar contraseña
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminAuth', 'true');
+                document.getElementById('passwordModal').classList.remove('active');
+                openTab('admin');
+                document.getElementById('adminPassword').value = '';
+            } else {
+                alert('❌ Contraseña incorrecta');
+            }
+        }
+
+        // Renderizar productos en la tienda
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            products.forEach(product => {
+                const stockClass = product.stock === 0 ? 'out' : product.stock < 5 ? 'low' : '';
+                const stockText = product.stock === 0 ? 'Agotado' : `${product.stock} disponibles`;
+
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">${product.emoji}</div>
+                    <h3 class="product-name">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-price">$${product.price.toLocaleString('es-CO')}</div>
+                    <span class="product-stock ${stockClass}">${stockText}</span>
+                    <button class="buy-btn" onclick="buyProduct(${product.id})" ${product.stock === 0 ? 'disabled' : ''}>
+                        ${product.stock === 0 ? '❌ Agotado' : '🛒 Comprar Ahora'}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Renderizar productos en el panel admin
+        function renderAdminProducts() {
+            const list = document.getElementById('adminProductList');
+            list.innerHTML = '<h3 style="margin-bottom: 1rem;">📦 Productos Actuales</h3>';
+
+            products.forEach(product => {
+                const item = document.createElement('div');
+                item.className = 'product-item';
+                item.innerHTML = `
+                    <div class="product-info">
+                        <strong>${product.emoji} ${product.name}</strong><br>
+                        <small>Precio: $${product.price.toLocaleString('es-CO')} | Stock: ${product.stock} | Categoría: ${product.category}</small>
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-btn edit-btn" onclick="editProduct(${product.id})">✏️ Editar</button>
+                        <button class="action-btn delete-btn" onclick="deleteProduct(${product.id})">🗑️ Eliminar</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // Agregar o actualizar producto
+        function addProduct() {
+            const name = document.getElementById('productName').value;
+            const description = document.getElementById('productDescription').value;
+            const price = parseInt(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value);
+            const category = document.getElementById('productCategory').value;
+            const emoji = document.getElementById('productEmoji').value || '🎨';
+
+            if (!name || !description || !price || stock === undefined) {
+                alert('⚠️ Por favor completa todos los campos');
+                return;
+            }
+
+            if (editingProductId) {
+                // Actualizar producto existente
+                const index = products.findIndex(p => p.id === editingProductId);
+                products[index] = {
+                    ...products[index],
+                    name,
+                    description,
+                    price,
+                    stock,
+                    category,
+                    emoji
+                };
+                editingProductId = null;
+                alert('✅ Producto actualizado exitosamente');
+            } else {
+                // Agregar nuevo producto
+                const newProduct = {
+                    id: Date.now(),
+                    name,
+                    description,
+                    price,
+                    stock,
+                    category,
+                    emoji
+                };
+                products.push(newProduct);
+                alert('✅ Producto agregado exitosamente');
+            }
+
+            clearForm();
+            renderProducts();
+            renderAdminProducts();
+        }
+
+        // Editar producto
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productEmoji').value = product.emoji;
+
+            editingProductId = id;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Eliminar producto
+        function deleteProduct(id) {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                products = products.filter(p => p.id !== id);
+                renderProducts();
+                renderAdminProducts();
+                alert('✅ Producto eliminado');
+            }
+        }
+
+        // Limpiar formulario
+        function clearForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productStock').value = '';
+            document.getElementById('productCategory').value = 'aretes';
+            document.getElementById('productEmoji').value = '';
+            editingProductId = null;
+        }
+
+        // Función para comprar con MercadoPago
+        async function buyProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product || product.stock === 0) {
+                alert('❌ Producto no disponible');
+                return;
+            }
+
+            // Aquí deberías hacer una llamada a tu backend para crear la preferencia de pago
+            // Este es un ejemplo simplificado
+            alert(`🛒 Procesando compra de: ${product.name}\n💰 Total: $${product.price.toLocaleString('es-CO')}\n\n⚠️ Para activar pagos reales, necesitas:\n1. Crear una cuenta en MercadoPago\n2. Obtener tus credenciales (Public Key y Access Token)\n3. Configurar un backend para procesar pagos\n\n📱 Por ahora, contáctanos por Instagram para completar tu compra: @aramacao_art`);
+
+            // Código de ejemplo para integración real con MercadoPago:
+            /*
+            try {
+                const response = await fetch('/api/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: product.name,
+                        price: product.price,
+                        quantity: 1
+                    })
+                });
+
+                const preference = await response.json();
+                mp.checkout({
+                    preference: {
+                        id: preference.id
+                    }
+                });
+            } catch (error) {
+                console.error('Error al procesar el pago:', error);
+                alert('Error al procesar el pago. Intenta nuevamente.');
+            }
+            */
+        }
+
+        // Cerrar modal al presionar Enter
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
